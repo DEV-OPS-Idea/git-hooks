@@ -1,5 +1,6 @@
 package com.java.git.hook.core;
 
+import com.java.git.hook.constant.JiraConstant;
 import com.java.git.hook.util.AppUtil;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GITCommitMsgHook {
+
 
     public static boolean check_valid_commit(String commitMessage, String currentBranches) {
         boolean blockedBranches = checkBlockedBranches(currentBranches);
@@ -18,11 +20,11 @@ public class GITCommitMsgHook {
             throw new RuntimeException(e);
         }
         if (blockedBranches) {
-            System.out.println("ERROR: Unable to commit to branch " + currentBranches + ". It is blocked for Commit. Please contact System Administrator.");
+            System.out.println(JiraConstant.ANSI_RED+"ERROR: Unable to commit to branch " + currentBranches + ". It is blocked for Commit. Please contact System Administrator." + JiraConstant.ANSI_RESET);
         }
         boolean containsIssueNumber = check_issuenumber_in_begining_commit_message(commitMessage,projectId);
         if (!containsIssueNumber) {
-            System.out.println("ERROR: Unable to commit as Commit Message should start with this pattern: "+projectId+"-1234 :[Message Description]");
+            System.out.println(JiraConstant.ANSI_RED+"ERROR: Unable to commit as Commit Message should start with this pattern: "+projectId+"-1234 :[Message Description]"+ JiraConstant.ANSI_RESET);
         }
         return blockedBranches || !containsIssueNumber;
     }
